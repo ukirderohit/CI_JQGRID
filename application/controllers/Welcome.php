@@ -40,9 +40,10 @@ class Welcome extends CI_Controller {
         $sidx = $this->input->get('sidx'); // field name which you want to sort
         $sord = $this->input->get('sord'); // field data which you want to soft
         $lid = $this->input->get('id');
+        $lto = $this->input->get('gender');
 //        echo $lid;
         if(!$sidx) { $sidx = 1; } // if its empty set to 1
-        $count = $this->WelcomeModel->getAllCustomerListCount($search_field, $search_string, $lid);
+        $count = $this->WelcomeModel->getAllCustomerListCount($search_field, $search_string, $lid, $lto);
         $total_pages = 0;
         if($count > 0) { $total_pages = ceil($count/$limit); }
         if($page > $total_pages) { $page = $total_pages; }
@@ -50,7 +51,7 @@ class Welcome extends CI_Controller {
         $data = array('page'=>$page,
             'total'=>$total_pages,
             'records'=>$count,
-            'rows'=>$this->WelcomeModel->getAllCustomersList($sidx, $sord, $start, $limit, $search_field, $search_string,$lid)
+            'rows'=>$this->WelcomeModel->getAllCustomersList($sidx, $sord, $start, $limit, $search_field, $search_string,$lid, $lto)
         );
 //        var_dump($data);
         header('Content-Type: application/x-json; charset=utf-8');

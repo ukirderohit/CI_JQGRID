@@ -9,14 +9,19 @@ class WelcomeModel extends CI_Model {
         $this->load->database();
     }
 
-    public function getAllCustomerListCount($search_field, $search_string,$lid)
+    public function getAllCustomerListCount($search_field, $search_string,$lid,$lto)
     {
         $this->db->select('id','first_name','last_name','email','gender','ip_address','birth_date');
         $this->db->from('mock_data');
-
+        if(!empty($lid)){
+//            $where = "id IN $lid";
+            $this->db->where_in('id',$lid);
+        }
+        if(!empty($lto)){
+            $this->db->where('gender',$lto);
+        }
 //        $this->db->where_in('id ', array($lid));
-        $where = "id IN ($lid)";
-        $this->db->where($where);
+
         if($search_field == 'id') { $this->db->like('id', $search_string); }
 //        if($search_field == 'first_name') { $this->db->like('first_name', $search_string); }
 //        if($search_field == 'last_name') { $this->db->like('last_name', $search_string); }
@@ -38,7 +43,7 @@ class WelcomeModel extends CI_Model {
      * $search_field : The searching field title, where you want to search
      * $search_string : The searching input string
      */
-    public function getAllCustomersList($sidx, $sord, $start, $limit, $search_field, $search_string,$lid)
+    public function getAllCustomersList($sidx, $sord, $start, $limit, $search_field, $search_string,$lid,$lto)
     {
 //        $this->db->select('BaseTbl.customer_id, BaseTbl.customer_name,
 //tbl_state.state_name, tbl_dist.dist_name, tbl_city.city_name,
@@ -55,8 +60,13 @@ class WelcomeModel extends CI_Model {
         $this->db->select('ip_address');
         $this->db->select('birth_date');
         $this->db->from('mock_data');
-        $where = "id IN ($lid)";
-        $this->db->where($where);
+        if(!empty($lid)){
+//            $where = "id IN $lid";
+            $this->db->where_in('id',$lid);
+        }
+        if(!empty($lto)){
+            $this->db->where('gender',$lto);
+        }
 //        $this->db->where_in('id',array($lid));
         if($sidx == 'id') { $this->db->order_by('id', $sord); }
 //        else if($sidx == 'first_name') { $this->db->order_by('first_name', $sord); }

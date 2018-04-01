@@ -100,16 +100,41 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div id="pager"></div>
 </div>
 
-
+<div>
+    From: <input id="from"  multiple size="10"></input>
+    id :<select id="id" multiple>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+    To: <input id="to"  size="10"></input>
+    <input id="search" type="button" value="Search"></input>
+    <br/>
+    <br/>
+</div>
 <script type="text/javascript">
     $(document).ready(function() {
-
+        $("#search").click(function(){
+            var from = $("#id").val(),
+                to = $("#to").val();
+            if( from ) {
+               // console.log(from);
+                $("#rcRecords").jqGrid('setGridParam', {postData:{"id":from}, search: true} );
+                $("#rcRecords").trigger("reloadGrid");
+            }
+            if( to ) {
+                //console.log(to);
+                $("#rcRecords").jqGrid('setGridParam', {postData:{"gender":to}, search: true} );
+                $("#rcRecords").trigger("reloadGrid");
+            }
+        });
         var baseurl = "<?php echo base_url(); ?>";
         $('#rcRecords').jqGrid({
             url: baseurl + "index.php/Welcome/getCustomers",
-            postData: {
-                id : function () { return [10,11,12,14,15,16,1000] }
-            },
+//            postData: {
+//                id : function () { if($("#id").val()!=null){return $("#id").val()} }//serialize
+//            },
             datatype: "json",
             height: "auto",
             width: "700",
