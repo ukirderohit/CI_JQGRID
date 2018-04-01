@@ -5,7 +5,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head>
 	<meta charset="utf-8">
 	<title>Welcome to CodeIgniter</title>
-
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+    <script type="text/ecmascript" src="<?php echo base_url(); ?>js/jquery.min.js"></script>
+    <!-- We support more than 40 localizations -->
+    <script type="text/ecmascript" src="<?php echo base_url(); ?>js/trirand/i18n/grid.locale-en.js"></script>
+    <!-- This is the Javascript file of jqGrid -->
+    <script type="text/ecmascript" src="<?php echo base_url(); ?>js/trirand/src/jquery.jqGrid.js"></script>
+    <!-- This is the localization file of the grid controlling messages, labels, etc.
+    <!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>css/jquery-ui.css" />
+    <!-- The link to the CSS that the grid needs -->
+    <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url(); ?>css/trirand/ui.jqgrid.css" />
 	<style type="text/css">
 
 	::selection { background-color: #E13300; color: white; }
@@ -85,5 +95,60 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 </div>
 
+<div>
+    <table id="rcRecords"></table>
+    <div id="pager"></div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var baseurl = "<?php echo base_url(); ?>";
+        $('#rcRecords').jqGrid({
+            url: baseurl + "index.php/Welcome/getCustomers",
+            postData: {
+                id : function () { return [10,11,12,14,15,16,1000] }
+            },
+            datatype: "json",
+            height: "auto",
+            width: "700",
+            colNames: ['Id','First Name','Last Name','Email','Gender', 'IP address', 'Birth date'],
+            colModel: [
+                {name: 'id', index: 'id', width: 55, key: true},
+            {name: 'first_name', index:'first_name', width:250},
+            {name: 'last_name', index:'last_name',width:100},
+            {name: 'email', index:'email',width:100},
+            {name: 'gender', index:'gender',width:100},
+            {name: 'ip_address', index:'ip_address',width:100},
+            {name: 'birth_date', index:'birth_date',width:100}
+            ],
+            jsonReader:{ repeatitems : false, id: "0" },
+            loadonce: false,
+            rowNum: 10,
+            rowList: [10, 20, 50, 100],
+            pager: jQuery('#pager'),
+            viewrecords: true,
+            multiselect: true,
+            caption: "All Customers",
+            gridview: true,
+            autoencode: true
+        }).navGrid('#pager1', {edit: false, add: false, del: false, refresh: true});
+        /* This function is used to show custom graphical status, ie. I show it using colors and bootstrap lable class
+         cellvalue : Its value of that cell on which you can process
+         option : option contain whole information like key
+         rowObject : it having the complete row information
+         You can log and see their elements using console.log(rowObject) etc. in firebug
+         */
+        function statusFormatter(cellvalue, options, rowObject) {
+            if (cellvalue == 1) {
+                return "<span class='label label-success'>Yes</span>";
+            }
+            else {
+                return "<span class='label label-danger'>No</span>";
+            }
+        }
+        });
+</script>
 </body>
 </html>
